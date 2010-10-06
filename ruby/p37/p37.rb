@@ -1,9 +1,23 @@
 #!/usr/bin/env ruby -wKU -I ../lib
 require 'util'
 
+def modpow(base, exponent, modulus)
+	result = 1
+	while exponent > 0
+		if (exponent & 1) == 1
+			result = (result * base) % modulus
+		end
+		exponent = exponent >> 1
+		base = (base * base) % modulus
+	end
+	return result
+end
+
 # use the miller rabin test to check primality
 def isPrime?(n) 
 	return false if n == 1
+	return true if n == 2
+	return false if n % 2 == 0
 	nminus = n - 1
 	s = 0
 	d = nminus
@@ -23,7 +37,7 @@ def isPrime?(n)
 		alla = [2, 7, 61]
 	end
 	alla.each do |a|
-		if (a ** d) % n != 1 && (0..(s-1)).all? { |r| (a ** ((2 ** r) * d)) % n != nminus }
+		if modpow(a, d,  n) != 1 && (0..(s-1)).all? { |r| modpow(a ,(2 ** r) * d, n) != nminus }
 			return false
 		end
 	end
@@ -34,11 +48,10 @@ isPrime? 3
 $endarray = ["3", "7"]
 $middlearray = ["1", "3", "7", "9"]
 
-def createNumbers(numOfDigits)
-	ary = $endarray
-	numOfDigits.times { |i| ary = ary.product($middlearray) }
-	ary = ary.product($endarray)
-	ary.map { |a| a.flatten! ;a.reduce("") { |str, s| str + s }.to_i }
+def createNumbers(numbersArray)
+	ary = numbersArray.map { |n| n.to_s }
+	ary = ary.product($middlearray)
+	ary.map { |a| a.flatten! ;a.reduce("") { |str, s| str + s }.to_i }.select { |n| isPrime? n }
 end
 
 
@@ -59,14 +72,15 @@ def isTruncatable?(number)
 	istruncatable
 end
 
-i = 0
+nums = [2, 3, 5, 7]
 truncatable = []
-while truncatable.length < 10
+while nums.length > 0
+	puts "nums size: #{nums.length}"
 #while i < 1
-	nums = createNumbers(i)
+	nums = createNumbers(nums)
 	#p nums
 	nums.each { |n| truncatable << n if isPrime?(n) && isTruncatable?(n) }
-	i += 1
 end
 
 p truncatable
+p truncatable.reduce(:+)

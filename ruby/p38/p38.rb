@@ -1,4 +1,6 @@
-#!/usr/bin/env ruby -wKU
+#!/usr/bin/env ruby -wKU -I ../lib
+
+require 'util'
 
 def getPandigital(number)
 	pandigitalString = ""
@@ -10,5 +12,7 @@ def getPandigital(number)
 	pandigitalString
 end
 
-p getPandigital(192)
-p getPandigital(1)
+puts "testing #{v = getPandigital(192)}: #{isPandigital? v}"
+puts "testing #{v = getPandigital(1)}: #{isPandigital? v}"
+puts "testing #{v = getPandigital(2)}: #{isPandigital? v}"
+puts "testing #{v = getPandigital(3)}: #{isPandigital? v}"

@@ -7,4 +7,8 @@ while str.length < 1000000
 	i += 1
 end
 
-p str
+d = []
+digits = str.chars.to_a
+7.times { |i| d << digits[(10 ** i) - 1] }
+
+p d.reduce(1) { |prod, c| prod * c.to_i }

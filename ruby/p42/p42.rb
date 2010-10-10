@@ -2,4 +2,6 @@
 
 wordstxt = File.new("words.txt")
 
-p wordstxt
+p wordstxt.read("\"")
+
+

@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -wKU
+#!/usr/bin/env ruby -wU
 
 name = ARGV[0]
 Dir.mkdir(name)

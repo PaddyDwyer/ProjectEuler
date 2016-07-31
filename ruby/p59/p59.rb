@@ -26,12 +26,16 @@ cipher_chars = f.read().split(",").map { |s| s.to_i }
       key = [i, j, k]
       test_chars = xor(key, cipher_chars)
 
+      # reject any control chars or non text chars
       ctrl_chars = test_chars.select { |c| c < 32 || c > 126 }
 
       if (ctrl_chars.empty?)
         keytext= key * ','
+
         cipher_text = test_chars.map { |c| c.chr }.join
+
         sum = test_chars.reduce(:+)
+
         print keytext, ": ", sum, ", ", cipher_text, "\n"
       end
     end
